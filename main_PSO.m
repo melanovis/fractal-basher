@@ -39,7 +39,7 @@ image_raw = abs(image_raw);
 target_image = round(image_raw);
 %target_image = imdilate(target_image, strel('disk', 1));
 
-root_quantity = 50+3;
+root_quantity = 40+3;
 
 n_DOF = root_quantity*4; %how many variables?
 var_size = [1, n_DOF]; %solution matrix size
@@ -251,6 +251,8 @@ while global_best_fitness < stop_fitness
         %set(gca,"colorscale","log")
         hold off
         
+        set(findall(gcf,'-property','FontSize'), 'FontName', 'Times')
+
         drawnow()        
     end
 

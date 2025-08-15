@@ -26,7 +26,7 @@ domain_y = domain_x./aspect_ratio;
 [x_plane, y_plane] = meshgrid(canvas_x, canvas_y);
 complex_plane = x_plane + y_plane.*j; 
 
-root_quantity = 50;
+root_quantity = 40;
 
 bounds = 1;
 [root_grid_default_x,root_grid_default_y] = meshgrid(linspace(-bounds,bounds,floor(sqrt(root_quantity))), linspace(-bounds,bounds,floor(sqrt(root_quantity))));
