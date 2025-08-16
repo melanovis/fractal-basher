@@ -5,12 +5,12 @@ clf reset
 %close all
 
 
-record_video = false;
+record_video = true;
 
-pre_render_view = true;
+pre_render_view = false;
 render_mask = false;
 
-animation_frames = 10;
+animation_frames = 100;
 
 filename = "root_catalog.mat";
 load(filename)
@@ -28,7 +28,7 @@ end
 convergence_tolerance = 1e-7;
 max_iters = 2e2;
 
-dims = ceil([1920,1080]./8); %control res
+dims = ceil([1920,1080]./20); %control res
 aspect_ratio = dims(1)/dims(2);
 view_domain_x = [-1,1];
 view_domain_y = view_domain_x./aspect_ratio;
@@ -41,7 +41,7 @@ domain_y = domain_x./aspect_ratio;
 [x_plane, y_plane] = meshgrid(canvas_x, canvas_y);
 complex_plane = x_plane + y_plane.*j; 
 
-root_quantity = 40;
+root_quantity = 50;
 
 bounds = 1;
 [root_grid_default_x,root_grid_default_y] = meshgrid(linspace(-bounds,bounds,floor(sqrt(root_quantity))), linspace(-bounds,bounds,floor(sqrt(root_quantity))));
@@ -55,11 +55,13 @@ end
 root_sequence = [
 0, -3, 0, root_grid_default %first three are transformations
 -j*pi/2, pi/2, 0, root_grid_default
-root_map(find(root_names=="newton"),:)
+root_map(find(root_names=="door_1"),:)
+-j*pi/2, pi/2, 0, root_grid_default
 ];
 
 % convergence map indexes which will be painted black when moving towards that root configuration, 0 corresponds to no indexes
 mask_outs = [ 
+0
 0
 0
 0
@@ -79,7 +81,7 @@ for ind_frame = 1:animation_frames
 
     for n=1:width(root_sequence)
 
-        %may need to find a better way to find easing in future
+        %may need to find a better way to find easing in future, should be pre-computed
         sequence = root_sequence(:,n);
         time_range = 0:length(sequence)-1;
         time_interp = linspace(min(time_range),max(time_range),animation_frames);

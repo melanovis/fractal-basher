@@ -4,9 +4,9 @@ clc
 clf reset
 %close all
 
-image_raw = imread("newton.jpg");
+image_raw = imread("image.jpg");
 filename = "root_catalog.mat";
-root_config_name = "newton";
+root_config_name = "door_2";
 
 if ~exist(filename, 'file')
     root_names = [];
@@ -20,7 +20,7 @@ save(filename,"root_names","root_map");
 convergence_tolerance = 1e-7;
 max_iters = 20;
 
-dims = ceil([1920,1080]./30);
+dims = ceil([1920,1080]./26);
 aspect_ratio = dims(1)/dims(2);
 view_domain_x = [-1,1];
 view_domain_y = view_domain_x./aspect_ratio;
@@ -39,7 +39,7 @@ image_raw = abs(image_raw);
 target_image = round(image_raw);
 %target_image = imdilate(target_image, strel('disk', 1));
 
-root_quantity = 40+3;
+root_quantity = 50+3;
 
 n_DOF = root_quantity*4; %how many variables?
 var_size = [1, n_DOF];
@@ -53,7 +53,7 @@ phi = phi_1+phi_2;
 kappa = 1;
 chi = 2*kappa/abs(2-phi-sqrt(phi^2-4*phi));
 
-population = 8*n_DOF*3;
+population = 8*200;
 w = chi;
 w_damp = 0.7;
 w_original = w_damp;

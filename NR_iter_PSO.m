@@ -1,12 +1,37 @@
 function [converged_root, return_matrix, roots_return, fitness] = NR_iter_PSO(start_location, input_vector, convergence_tolerance, max_iters, target_image)
 
     input_vector = reshape(input_vector,4,[]);
-    input_scaling_mag = 2;
+    input_scaling_mag = 3;
     roots =  interp1([0,0.01,0.1,1],[0,0, -10, 10],input_vector(1,:)) .* 10.^interp1([0,1],[-input_scaling_mag,input_scaling_mag],input_vector(2,:)) + interp1([0,0.01,0.1,1],[0,0,-10,10],input_vector(3,:)) .* j.*10.^interp1([0,1],[-input_scaling_mag,input_scaling_mag],input_vector(4,:));
     
     view_transform = roots(1:3); %first three inputs are transformations 
-    start_location = (1 - (view_transform(3)/2)*j).*start_location + (view_transform(3)/2)*j.*conj(start_location); %shear
-    start_location = start_location.*exp(view_transform(2)) + view_transform(1); %rotation and translation
+    
+    if abs(imag(view_transform(2))) > 2*pi %don't want too much rotation
+        view_transform(2) = real(view_transform(2)) + sign(imag(view_transform(2)))*j*2*pi;
+    end
+
+    shear_limit = 2;
+    if abs(real(view_transform(3))) > shear_limit
+        view_transform(3) = shear_limit*sign(real(view_transform(3))) + imag(view_transform(3));
+    end
+    if abs(imag(view_transform(3))) > shear_limit
+        view_transform(3) = real(view_transform(3)) + shear_limit*sign(imag(view_transform(3)));
+    end
+
+    %managing shear
+    start_location_tmp = reshape(start_location,1,[]);
+    start_location_decomp(1,:) = real(start_location_tmp);
+    start_location_decomp(2,:) = imag(start_location_tmp);
+
+    start_location_decomp = start_location_decomp.' * [1, real(view_transform(3)); 0, 1]; %shear
+    start_location_decomp = start_location_decomp * [1, 0; imag(view_transform(3)), 1];
+    
+    start_location_tmp = start_location_decomp(:,1) + start_location_decomp(:,2).*j;
+    start_location_tmp = reshape(start_location_tmp, size(start_location));
+
+    start_location = start_location_tmp; 
+
+    start_location = start_location.*exp(view_transform(2)) + view_transform(1); %rotation, scaling and translation
 
     roots = roots(4:end);
     roots_return = [view_transform, roots];

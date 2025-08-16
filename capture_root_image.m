@@ -8,7 +8,7 @@ clf reset
 filename = "root_catalog.mat";
 load(filename)
 
-roots = root_map(find(root_names=="newton"),:);
+roots = root_map(find(root_names=="door_2"),:);
 image_raw = imread("newton.jpg");
 
 img_ontop = false;
@@ -16,7 +16,7 @@ img_ontop = false;
 convergence_tolerance = 1e-7;
 max_iters = 2e2;
 
-dims = ceil([1920,1080]./8); %control res
+dims = ceil([1920,1080]./5); %control res
 aspect_ratio = dims(1)/dims(2);
 view_domain_x = [-1,1]; 
 view_domain_y = view_domain_x./aspect_ratio;
@@ -29,16 +29,13 @@ image_raw = imresize(image_raw,[flip(dims)]);
 image_raw = abs(image_raw);
 target_image = round(double(image_raw));
 
-% canvas_x = 3.5*(canvas_x*0.67+0.015); %some extra touch-ups
-% canvas_y = 3.5*(canvas_y + 0.1);
-
 domain_x = [-1,1];
 domain_y = domain_x./aspect_ratio;
 
 [x_plane, y_plane] = meshgrid(canvas_x, canvas_y);
 complex_plane = x_plane + y_plane.*j; 
 
-root_quantity = 40;
+root_quantity = 50;
 
 bounds = 1;
 [root_grid_default_x,root_grid_default_y] = meshgrid(linspace(-bounds,bounds,floor(sqrt(root_quantity))), linspace(-bounds,bounds,floor(sqrt(root_quantity))));
@@ -55,7 +52,7 @@ converged_root = converged_root-1;
 
 cmap = interp1([0,0.2,0.4,0.6,0.8,1], [[0 0 0]; [0.259 0.039 0.408]; [0.584 0.149 0.404]; [0.867 0.318 0.227]; [0.98 0.647 0.039]; [0.98 1 0.643]], linspace(0, 1, 1e3));
 
-maskout_index = 12;
+maskout_index = 36;
 
 rootmap_full_maskout = zeros(size(converged_root));
 for n=1:height(converged_root)
