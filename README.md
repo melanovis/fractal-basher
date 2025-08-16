@@ -8,3 +8,5 @@ This system does not work well and is more a test to see how plausible this idea
 Additionally i've included a script for generating still captures of approximated images and an animation script that uses second-order dynamics to interpolate between root configurations.
 
 If anyone can recommend a better fractal to use, or a better optimisation strategy for navigating chaotic fractal behaviour, please feel free to reach out.
+
+![](images/screen.jpg)
