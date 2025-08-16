@@ -1,8 +1,8 @@
 function [converged_root, return_matrix, roots_return, fitness] = NR_iter_PSO(start_location, input_vector, convergence_tolerance, max_iters, target_image)
 
     input_vector = reshape(input_vector,4,[]);
-    input_scaling_mag = 4;
-    roots =  interp1([0,0.09,0.1,1],[0,0, -10, 10],input_vector(1,:)) .* 10.^interp1([0,1],[-input_scaling_mag,input_scaling_mag],input_vector(2,:)) + interp1([0,0.09,0.1,1],[0,0,-10,10],input_vector(3,:)) .* j.*10.^interp1([0,1],[-input_scaling_mag,input_scaling_mag],input_vector(4,:));
+    input_scaling_mag = 2;
+    roots =  interp1([0,0.01,0.1,1],[0,0, -10, 10],input_vector(1,:)) .* 10.^interp1([0,1],[-input_scaling_mag,input_scaling_mag],input_vector(2,:)) + interp1([0,0.01,0.1,1],[0,0,-10,10],input_vector(3,:)) .* j.*10.^interp1([0,1],[-input_scaling_mag,input_scaling_mag],input_vector(4,:));
     
     view_transform = roots(1:3); %first three inputs are transformations 
     start_location = (1 - (view_transform(3)/2)*j).*start_location + (view_transform(3)/2)*j.*conj(start_location); %shear

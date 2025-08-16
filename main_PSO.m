@@ -42,8 +42,8 @@ target_image = round(image_raw);
 root_quantity = 40+3;
 
 n_DOF = root_quantity*4; %how many variables?
-var_size = [1, n_DOF]; %solution matrix size
-var_min = 0; %variable bounds
+var_size = [1, n_DOF];
+var_min = 0; 
 var_max = 1;
 
 %clerc kennedy construction coefficient function
@@ -53,7 +53,7 @@ phi = phi_1+phi_2;
 kappa = 1;
 chi = 2*kappa/abs(2-phi-sqrt(phi^2-4*phi));
 
-population = 8*100;
+population = 8*n_DOF*3;
 w = chi;
 w_damp = 0.7;
 w_original = w_damp;
@@ -187,11 +187,7 @@ while global_best_fitness < stop_fitness
             end
             [~,ind_sort] = sort(fitness_score);
 
-            if rand()<0.75
-                ind_ag = ind_sort(1:round(length(ind_sort) * interp1([0,1],[0.3,0.999],rand())) );
-            else
-                ind_ag = ind_sort(end - length(ind_sort)*0.05 : end-1);
-            end
+            ind_ag = ind_sort(1:round(length(ind_sort) * interp1([0,1],[0.3,0.99],rand())) );
 
             for n=1:length(ind_ag)
                 particle(ind_ag(n)).position = rand(1,n_DOF)*var_max;

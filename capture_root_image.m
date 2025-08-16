@@ -9,16 +9,28 @@ filename = "root_catalog.mat";
 load(filename)
 
 roots = root_map(find(root_names=="newton"),:);
+image_raw = imread("newton.jpg");
+
+img_ontop = false;
 
 convergence_tolerance = 1e-7;
 max_iters = 2e2;
 
-dims = ceil([1920,1080]./10); %control res
+dims = ceil([1920,1080]./8); %control res
 aspect_ratio = dims(1)/dims(2);
-view_domain_x = [-1,1];
+view_domain_x = [-1,1]; 
 view_domain_y = view_domain_x./aspect_ratio;
 canvas_x = linspace(view_domain_x(1),view_domain_x(2),dims(1));
 canvas_y = linspace(view_domain_y(1),view_domain_y(2),dims(2));
+
+image_raw = squeeze(image_raw(:,:,1));
+image_raw = image_raw./max(max(image_raw));
+image_raw = imresize(image_raw,[flip(dims)]);
+image_raw = abs(image_raw);
+target_image = round(double(image_raw));
+
+% canvas_x = 3.5*(canvas_x*0.67+0.015); %some extra touch-ups
+% canvas_y = 3.5*(canvas_y + 0.1);
 
 domain_x = [-1,1];
 domain_y = domain_x./aspect_ratio;
@@ -43,9 +55,7 @@ converged_root = converged_root-1;
 
 cmap = interp1([0,0.2,0.4,0.6,0.8,1], [[0 0 0]; [0.259 0.039 0.408]; [0.584 0.149 0.404]; [0.867 0.318 0.227]; [0.98 0.647 0.039]; [0.98 1 0.643]], linspace(0, 1, 1e3));
 
-colormap(flip(cmap))
-
-maskout_index = 30;
+maskout_index = 12;
 
 rootmap_full_maskout = zeros(size(converged_root));
 for n=1:height(converged_root)
@@ -53,6 +63,10 @@ for n=1:height(converged_root)
     d_conv(n,rootmap_with_maskout) = nan;
     rootmap_full_maskout(n,:) = rootmap_with_maskout;
 end
+
+
+colormap(flip(cmap))
+%colormap(cmap)
 
 hold on
 grid on
@@ -62,9 +76,17 @@ xlim(domain_x)
 ylim(domain_y)
 view([0,90])
 d_conv = flip(d_conv);
-imagesc(canvas_x, canvas_y, d_conv.^0.75, alphadata = ~isnan(d_conv))
+
+if img_ontop
+    diffmask = target_image.*max(max(d_conv)) - d_conv;
+    diffmask = abs(diffmask./max(max(diffmask)));
+    imagesc(canvas_x, canvas_y,diffmask)
+else
+    imagesc(canvas_x, canvas_y, d_conv.^0.75, alphadata = ~isnan(d_conv))
+    clim([1,max_iters]);
+end
+
 set(gca,'Color','k')
-clim([1,max_iters]);
 set(gca,'TickLength',[0 0])
 %set(gca,"ColorScale","log")
 

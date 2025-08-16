@@ -7,7 +7,7 @@ clf reset
 
 record_video = false;
 
-pre_render_view = false;
+pre_render_view = true;
 render_mask = false;
 
 animation_frames = 10;
