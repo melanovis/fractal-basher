@@ -1,5 +1,6 @@
-fractal basher
-a PSO based system which tries to shape newtons fractals into silhouettes of images, written in MATLAB.
+This was just something I was messing around with for fun.
+
+This is a fractal basher - a PSO based system which tries to shape newtons fractals into silhouettes of images, written in MATLAB.
 
 Using particle swarm optimisation, this simple MATLAB script attempts to configure a series of roots for a modified newtons fractal into the rough outline of some target silhouette for a cool visual effect. Originally a markov-chain annealing system was employed but this was generally much more unsuccessful.
 
