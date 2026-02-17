@@ -11,3 +11,5 @@ Additionally i've included a script for generating still captures of approximate
 If anyone can recommend a better fractal to use, or a better optimisation strategy for navigating chaotic fractal behaviour, please feel free to reach out.
 
 ![](images/screen.jpg)
+
+No LLM-derived code is used in this work.
